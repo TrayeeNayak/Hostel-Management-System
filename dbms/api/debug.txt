@@ -1,0 +1,674 @@
+Array
+(
+    [name] => sneha
+    [usn] => 4CB21CS117
+    [branch] => computer Science
+    [email] => sneha@gmail.com
+    [address] => sirsi
+    [room] => 5
+    [phone] => 9845670983
+    [semester] => 4
+    [gender] => f
+    [father_name] => nagraj
+    [father_phone] => 9241086650
+    [intake_date] => 2024-02-14
+    [hostel_id] => 1
+)
+
+if (isset($_POST['SNAME']) && isset($_POST['USN']) && isset($_POST['SBRANCH']) && isset($_POST['SEMAIL']) && isset($_POST['SADDRESS']) && isset($_POST['SROOM']) && isset($_POST['SPHONE']) && isset($_POST['SSEM']) && isset($_POST['SGENDER']) && isset($_POST['FNAME']) && isset($_POST['FPHONE']) && isset($_POST['INTAKE_DATE']) && isset($_POST['HOSTEL_ID'])) {
+    // Prepare SQL statement to update student information
+    $sql = "UPDATE student SET SNAME=?, SBRANCH=?, SEMAIL=?, SADDRESS=?, SROOM=?, SPHONE=?, SSEM=?, SGENDER=?, FNAME=?, FPHONE=?, INTAKE_DATE=?, HOSTEL_ID=? WHERE USN=?";
+
+    // Prepare the SQL statement
+    $stmt = $con->prepare($sql);
+
+    // Bind parameters and execute the statement
+    $stmt->bind_param("sssssssssssss", $_POST['SNAME'], $_POST['SBRANCH'], $_POST['SEMAIL'], $_POST['SADDRESS'], $_POST['SROOM'], $_POST['SPHONE'], $_POST['SSEM'], $_POST['SGENDER'], $_POST['FNAME'], $_POST['FPHONE'], $_POST['INTAKE_DATA'], $_POST['HOSTEL_ID'], $_POST['USN']);
+
+
+
+<style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+        *{
+            margin: 0;
+            padding: 0;
+            outline: none;
+            border: none;
+            text-decoration: none;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        body{
+            background: #dfe9f5;
+        }
+        .container{
+            display: flex;
+
+        }
+        nav{
+            position:relative;
+            top: 0;
+            bottom: 0;
+            height: 100vh;
+            left: 0;
+            background: #fff;
+            width: 320px;
+            overflow:hidden;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+        }
+        .logo{
+            text-align: center;
+            display: flex;
+            margin: 10px 0 0 10px;
+        }
+        .logo img{
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+        }
+        .logo span{
+            font-weight:bold;
+            padding-left: 15px;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+        a{
+            position: relative;
+            color: rgba(85, 83, 83);
+            font-size: 14px;
+            display: table;
+            width: 280px;
+            padding: 10px;
+        }
+        nav .fas{
+            position: relative;
+            width: 70px;
+            height: 40px;
+            top: 14px;
+            font-size:20px;
+            text-align: center;
+        }
+        .nav-item{
+            position: relative;
+            top: 12px;
+            margin-left: 10px;
+        }
+        a:hover{
+            background: #eee;
+        }
+        .logout{
+            position: absolute;
+            bottom: 0;
+        }
+        
+        /* main section */
+        .main{
+            position: relative;
+            padding: 30px;
+            width: 100%;
+        }
+        .main-top{
+            display: flex;
+            width: 100%;
+        }
+        .main-top i{
+            position: absolute;
+            right: 0;
+            margin: 10px 30px;
+            color: rgb(11,109,109);
+            cursor: pointer;
+        }
+        .main-skills{
+            display: flex;
+            margin-top: 20px;
+        }
+        .main-skills .card{
+            width: 50%;
+            margin: 20px;
+            background: #fff;
+            text-align: center;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+        }
+        .main-skills .card h3{
+            margin: 10px;
+            text-transform: capitalize;
+        }
+        .main-skills .card p{
+            font-size:16px;
+        }
+        .main-skills .card i{
+            font-size:22px;
+            padding: 20px;
+        }
+
+
+    </style>
+
+
+
+    <?php
+session_start(); // Start the session
+
+// Check if the user is logged in
+if(isset($_SESSION['username'])) {
+    $username = $_SESSION['username']; // Fetch username from session
+
+    // Include your database connection script
+    include 'connect.php';
+
+    // Prepare and execute the query to fetch user details
+    $stmt = $con->prepare("SELECT STAFF_NAME, STAFF_GENDER, STAFF_EMAIL FROM warden WHERE STAFF_NAME = ?");
+    $stmt->bind_param("s", $username);
+
+    // Execute the prepared statement
+    $stmt->execute();
+
+    // Bind the result variables
+    $stmt->bind_result($username, $wgender, $wemail);
+
+    // Fetch the values
+    $stmt->fetch();
+
+    // Close the statement
+    $stmt->close();
+
+    // Query to get total number of students
+    $total_students_query = "SELECT COUNT(*) AS total_students FROM student";
+    // echo "total_students_query: $total_students_query<br>";
+    $total_students_result = $con->query($total_students_query);
+
+    if (!$total_students_result) {
+        // echo "Error in total_students_query: " . $con->error;
+    } else {
+        $total_students_row = $total_students_result->fetch_assoc();
+        $total_students = $total_students_row['total_students'];
+    }
+
+    // Query to get total number of boys
+    $total_boys_query = "SELECT COUNT(*) AS total_boys FROM student WHERE SGENDER = 'm'";
+    // echo "total_boys_query: $total_boys_query<br>";
+    $total_boys_result = $con->query($total_boys_query);
+
+    if (!$total_boys_result) {
+        echo "Error in total_boys_query: " . $con->error;
+    } else {
+        $total_boys_row = $total_boys_result->fetch_assoc();
+        $total_boys = $total_boys_row['total_boys'];
+    }
+
+    // Query to get total number of girls
+    $total_girls_query = "SELECT COUNT(*) AS total_girls FROM student WHERE SGENDER = 'f'";
+    // echo "total_girls_query: $total_girls_query<br>";
+    $total_girls_result = $con->query($total_girls_query);
+
+    if (!$total_girls_result) {
+        // echo "Error in total_girls_query: " . $con->error;
+    } else {
+        $total_girls_row = $total_girls_result->fetch_assoc();
+        $total_girls = $total_girls_row['total_girls'];
+    }
+
+    // Array to store hostel-wise student count
+    $students_in_hostel = array();
+
+    // Loop through each hostel ID to get total number of students
+    for ($hostel_id = 1; $hostel_id <= 5; $hostel_id++) {
+        $students_in_hostel_query = "SELECT COUNT(*) AS students_in_hostel FROM student WHERE HOSTEL_ID = $hostel_id";
+        // echo "students_in_hostel_query for hostel ID $hostel_id: $students_in_hostel_query<br>";
+        $students_in_hostel_result = $con->query($students_in_hostel_query);
+
+        if (!$students_in_hostel_result) {
+            // echo "Error in students_in_hostel_query for hostel ID $hostel_id: " . $con->error;
+        } else {
+            $students_in_hostel_row = $students_in_hostel_result->fetch_assoc();
+            $students_in_hostel[$hostel_id] = $students_in_hostel_row['students_in_hostel'];
+        }
+    }
+
+//     echo "Total Students: " . $total_students . "<br>";
+// echo "Total Boys: " . $total_boys . "<br>";
+// echo "Total Girls: " . $total_girls . "<br>";
+
+foreach ($students_in_hostel as $hostel_id => $count) {
+    echo "Total students in hostel $hostel_id: $count <br>";
+}
+
+
+    // Close the database connection
+    $con->close();
+} else {
+    // Redirect to login page if user is not logged in
+    header("Location: login.php");
+    exit();
+}
+?>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+        *{
+            margin: 0;
+            padding: 0;
+            outline: none;
+            border: none;
+            text-decoration: none;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        body{
+            background: #dfe9f5;
+        }
+        .container{
+            display: flex;
+
+        }
+        nav{
+            position:relative;
+            top: 0;
+            bottom: 0;
+            height: 100vh;
+            left: 0;
+            background: #fff;
+            width: 320px;
+            overflow:hidden;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+        }
+        .logo{
+            text-align: center;
+            display: flex;
+            margin: 10px 0 0 10px;
+        }
+        .logo img{
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+        }
+        .logo span{
+            font-weight:bold;
+            padding-left: 15px;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+        a{
+            position: relative;
+            color: rgba(85, 83, 83);
+            font-size: 14px;
+            display: table;
+            width: 280px;
+            padding: 10px;
+        }
+        nav .fas{
+            position: relative;
+            width: 70px;
+            height: 40px;
+            top: 14px;
+            font-size:20px;
+            text-align: center;
+        }
+        .nav-item{
+            position: relative;
+            top: 12px;
+            margin-left: 10px;
+        }
+        a:hover{
+            background: #eee;
+        }
+        .logout{
+            position: absolute;
+            bottom: 0;
+        }
+        
+        /* main section */
+        .main{
+            position: relative;
+            padding: 30px;
+            width: 100%;
+        }
+        .main-top{
+            display: flex;
+            width: 100%;
+        }
+        .main-top i{
+            position: absolute;
+            right: 0;
+            margin: 10px 30px;
+            color: rgb(11,109,109);
+            cursor: pointer;
+        }
+        .main-skills{
+            display: flex;
+            margin-top: 20px;
+        }
+        .main-skills .card{
+            width: 50%;
+            margin: 20px;
+            background: #fff;
+            text-align: center;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+        }
+        .main-skills .card h3{
+            margin: 10px;
+            text-transform: capitalize;
+        }
+        .main-skills .card p{
+            font-size:16px;
+        }
+        .main-skills .card i{
+            font-size:22px;
+            padding: 20px;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div class = "container">
+        <nav>
+            <ul>
+                <li><a href="#" class = "logo">
+                    <img src="../images/CEC.jpg" alt="">
+                    <span class ="nav-item">Dashboard</span>
+                </a></li>
+                <li><a href="../index.html">
+                    <i class = "fas fa-home"></i>
+                    <span class="nav-item">HOME</span>
+                </a></li>
+                <li><a href="info.php">
+                    <i class = "fas fa-user"></i>
+                    <span class="nav-item">STUDENT DETAILS</span>
+                </a></li>
+                <li><a href="#">
+                    <i class = "fas fa-out"></i>
+                    <span class="nav-item">OUTPASS</span>
+                </a></li>
+                <li><a href="#">
+                    <i class = "fas fa-sign-out-alt"></i>
+                    <span class="nav-item">LOGOUT</span>
+                </a></li>
+            </ul>
+        </nav>
+        <section class="main">
+            <div class="main-top">
+                
+                <i class="fas fa-user-cog"></i>
+            </div>
+            <div class="main-skills">
+                <div class="card">
+                <h3>Total students</h3>
+                    <i class="fas fa-laptop-code"></i>
+                    <p><?php echo $total_students; ?></p>
+                </div>
+                <div class="card">
+                <h3>Female Students</h3>
+                    <i class="fas fa-female"></i>
+                    <p><?php echo $total_girls; ?></p>
+                </div>
+                <div class="card">
+                    <h3>Male Students</h3>
+                    <i class="fas fa-female"></i>
+                    <p><?php echo $total_boys; ?></p>
+                </div>
+                <div class="card">
+                    <h3>Students in 3G</h3>
+                    <i class="fas fa-female"></i>
+                    <p><?php echo $hostel_id; ?></p>
+                </div>
+                
+            </div>
+            <section class="main">
+            <div class="main-top">
+                <i class="fas fa-user-cog"></i>
+            </div>
+            <div class="main-skills">
+                <div class="card">
+                    <h3>Students in 4G</h3>
+                    <i class="fas fa-female"></i>
+                    <p><?php echo $hostel_id; ?></p>
+                </div>
+                <div class="card">
+                    <h3>Students in 5G</h3>
+                    <i class="fas fa-female"></i>
+                    <p><?php echo $hostel_id; ?></p>
+                </div>
+                <div class="card">
+                    <h3>Students in 2G</h3>
+                    <i class="fas fa-female"></i>
+                    <p><?php echo $hostel_id; ?></p>
+                </div>
+           </div>
+            </section>
+        </section>
+    </div>
+ </body>
+</html>
+                
+
+                <?php foreach ($students_in_hostel as $hostel_id => $count) { ?>
+                <div class="card">
+                    <h3>Students in Hostel <?php echo $hostel_id; ?></h3>
+                    <i class="fas fa-users"></i>
+                    <p><?php echo $count; ?></p>
+                </div>
+            <?php } ?>
+
+             echo "Outpass application submitted successfully. Outpass ID: $outpass_id";
+
+
+
+             <?php
+session_start();
+$success = 0;
+$user = 0;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    include 'connect.php';
+
+    if (isset($_POST['usn']) && isset($_POST['password']) && isset($_POST['username']) && isset($_POST['role'])) {
+        $usn = $_POST['usn'];
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $username = $_POST['username']; 
+        $role = $_POST['role'];
+
+        if ($role == 'student') 
+        {
+            $stmt = $con->prepare("SELECT * FROM `student` WHERE USN = ?");
+            $stmt->bind_param("s", $usn);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $user = 1;
+            } else {
+                $stmt = $con->prepare("INSERT INTO `student` (USN, Spassword, SNAME) VALUES (?, ?, ?)");
+                $stmt->bind_param("sss", $usn, $password, $username);
+                $stmt->execute();
+                $success = 1;
+                
+            }
+        } else {
+            $stmt = $con->prepare("SELECT * FROM `warden` WHERE STAFF_EMAIL = ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                $user = 1;
+            } else {
+                $stmt = $con->prepare("INSERT INTO `warden` (STAFF_EMAIL, Wpassword, STAFF_NAME, STAFF_GENDER) VALUES (?, ?, ?, ?)");
+                $gender = ($role == "boys_warden") ? "male" : "female";
+                $stmt->bind_param("ssss", $email, $password, $username, $gender);
+                $stmt->execute();
+                $success = 1;
+            }
+        }
+    }
+}
+
+if ($user) {
+    $_SESSION['message'] = "User already exists.";
+}
+
+if ($success) {
+    $_SESSION['message'] = "You are successfully signed up as $username.";
+    header('Location: ../login.html');
+    exit();
+} else {
+    $_SESSION['message'] = "Unable to sign up.";
+}
+?>
+
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+session_start();
+
+// Debugging - Print POST data
+print_r($_POST);
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    include 'connect.php';
+    // Check if the required POST variables are set
+    if(isset($_POST['username']) && isset($_POST['password'])) {
+        $username = $_POST['username']; // Assuming email is used as the username
+        $password = $_POST['password'];
+        // $role = $_POST['loginrole']; 
+    }
+
+    if ($role == 'student') {
+        $stmt = $con->prepare("SELECT SNAME, Spassword FROM student WHERE SNAME = ?");
+    } else {
+        $stmt = $con->prepare("SELECT STAFF_NAME, Wpassword, STAFF_GENDER FROM warden WHERE STAFF_NAME = ?");
+    }
+    
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows == 1) {
+        $row = $result->fetch_assoc();
+        if ($role == 'student') {
+            if (password_verify($password, $row['Spassword'])) {
+                $_SESSION['username'] = $username;
+                $_SESSION['name'] = $row['SNAME'];
+                $_SESSION['loginrole'] = 'student';
+                header('Location: ./student.php');
+                exit();
+            } 
+        } else {
+            if (password_verify($password, $row['Wpassword'])) {
+                $_SESSION['username'] = $username;
+                $_SESSION['name'] = $row['STAFF_NAME'];
+                $_SESSION['loginrole'] = ($row['STAFF_GENDER'] == 'm') ? 'boys_warden' : 'girls_warden';
+                // Redirect based on the login role
+                if ($_SESSION['loginrole'] == 'boys_warden') {
+                    header('Location: ./bwarden.php');
+                } elseif ($_SESSION['loginrole'] == 'girls_warden') {
+                    header('Location: ./warden.php');
+                } else {
+                    header('Location: ./dash.php');
+                }
+                exit();
+            } 
+        }
+    }
+    // Invalid credentials
+    header('Location: login.html');
+    exit();
+}
+?>
+/////////
+
+<?php
+session_start();
+
+// Include the database connection file
+include("connect.php");
+
+// Check if form is submitted
+if(isset($_POST['allocate_room'])) {
+    $usn = $_POST['usn'];
+    $hostel_id = $_POST['hostel_id'];
+    $room_number = $_POST['room_number'];
+    $room_type = $_POST['room_type'];
+
+    // Insert room allocation into rooms table
+    $query = "INSERT INTO room (HOSTEL_ID, ROOM_NUMBER, ROOM_TYPE, USN) 
+              VALUES ('$hostel_id', '$room_number', '$room_type', '$usn')";
+    $result = mysqli_query($con, $query);
+
+    if ($result) {
+        // Update student's table with allocated room details
+        $update_query = "UPDATE student SET HOSTEL_ID = '$hostel_id', SROOM = '$room_number' WHERE USN = '$usn'";
+        $update_result = mysqli_query($con, $update_query);
+        
+        if ($update_result) {
+            // Redirect based on user role
+            if ($_SESSION['loginrole'] == 'girls_warden') {
+                header('Location: warden.php');
+            } else {
+                header('Location: bwarden.php');
+            }
+            exit();
+        } else {
+            $error_message = "Error updating student table: " . mysqli_error($con);
+        }
+    } else {
+        $error_message = "Error allocating room: " . mysqli_error($con);
+    }
+}
+
+// Debugging: Output error message if any
+if (isset($error_message)) {
+    echo "<script>console.error('" . $error_message . "');</script>";
+}
+?>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Room Allocation</title>
+</head>
+<body>
+
+<h2>Allocate Room</h2>
+
+<?php if(isset($error_message)) { ?>
+    <p><?php echo $error_message; ?></p>
+<?php } ?>
+
+<?php if(isset($success_message)) { ?>
+    <p><?php echo $success_message; ?></p>
+<?php } ?>
+
+<form method="POST" action="allot.php">
+    <label for="usn">Enter Student USN:</label>
+    <input type="text" name="usn" required><br>
+
+    <label for="hostel_id">Enter Hostel ID:</label>
+    <input type="text" name="hostel_id" required><br>
+
+    Room Number: <input type="text" name="room_number" required><br>
+    Room Type: <input type="text" name="room_type" required><br>
+    <button type="submit" name="allocate_room">Allocate Room</button>
+</form>
+
+</body>
+</html>
+

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="login.css">
+    <title>Signin & Sign up</title>
+    
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <link rel="stylesheet" href="css/aos.css">
+
+    <link rel="stylesheet" href="css/ionicons.min.css">
+
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+
+    
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+         body {
+            /* Set background image for the whole page */
+            background-image: url('images/CEC.jpg');
+            /* Ensure the background image covers the whole viewport */
+            background-size: cover;
+            /* Center the background image */
+            background-position: center;
+            /* Prevent the background image from repeating */
+            background-repeat: no-repeat;
+        }
+    </style>
+   
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+	    <div class="container">
+	      <a class="navbar-brand" href="index.html">CEC HOSTEL<span>MANGLORE</span></a>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="oi oi-menu"></span> Menu
+	      </button>
+
+          <div class="collapse navbar-collapse" id="ftco-nav">
+	        <ul class="navbar-nav ml-auto">
+	          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+	          <!-- <li class="nav-item"><a href="rooms.html" class="nav-link">Our Rooms</a></li>
+	          <li class="nav-item"><a href="restaurant.html" class="nav-link">Restaurant</a></li>
+	          <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li>
+	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> -->
+	          <li class="nav-item active"><a href="contact.html" class="nav-link">Contact</a></li>
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
+
+      
+        <div class="overlay"></div>
+        <div class="container">
+          <div class="row no-gutters slider-text d-flex align-itemd-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+                <div class="text">
+                  <p class="breadcrumbs mb-2"><span class="mr-2"><a href="index.html">Home</a></span> <span>Contact Us</span></p>
+                  <h1 class="mb-4 bread">Contact Us</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+      
+    <div class="wrapper">
+        <div class="form-container sign-up">
+            <form action="./api/warden_signup.php" class="signup" method="POST">
+                <h2>sign up</h2>
+                <div class="form-group">
+                    <input type="text" name="username" required>
+                    <i class="fas fa-user"></i>
+                    <label for="">username</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="id" required>
+                    <i class="fas fa-at"></i>
+                    <label for="">STAFF_ID</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" required>
+                    <i class="fas fa-lock"></i>
+                    <label for="">password</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="confirm" required>
+                    <i class="fas fa-lock"></i>
+                    <label for="">confirm password</label>
+                </div>
+                <div class="form-group">
+                    <label for="role">Select Role:</label><br><br>
+                    <select name="role" id="role" required>
+                        <option value="boys_warden">Boy's Warden</option>
+                        <option value="girls_warden">Girl's Warden</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn" onclick="login.html">sign up</button>
+                <div class="link">
+                    <p>You already have an account?<a href="#" class="signin-link"> sign in</a></p>
+                </div>
+            </form>
+        </div>
+    
+        <div class="form-container sign-in">
+            <form action="./api/warden_login.php" class="signin" method="POST">
+                <h2>login</h2>
+                <div class="form-group">
+                    <input type="text" name="username" required>
+                    <i class="fas fa-user"></i>
+                    <label for="">Username</label>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" required>
+                    <i class="fas fa-lock"></i>
+                    <label for="">password</label>
+                </div>
+                <div class="form-group">
+                    <label for="loginrole">select role:</label><br><br>
+                    <select name="loginrole" id="loginrole" required>
+                        <!-- <option value="student" selected>Student</option> -->
+                        <option value="boys_warden">Boy's Warden</option>
+                        <option value="girls_warden">Girl's warden</option>
+                    </select>
+                </div>
+                <div class="forgot-pass">
+                    <a href="./api/forgot-password.php">forgot password?</a>
+                </div>
+                <button type="submit" class="btn">login</button>
+                <div class="link">
+                    <p>Don't have an account?<a href="#" class="signup-link"> sign up</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+    </section>
+    
+    <script src="https://kit.fontawesome.com/9e5ba2e3f5.js" crossorigin="anonymous"></script>
+    <script src="js/login.js"></script>
+</body>
+
+</html>

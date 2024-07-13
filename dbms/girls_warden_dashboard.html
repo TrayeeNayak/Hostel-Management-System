@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Custom Admin Dashboard</title>
+<style>
+/* Custom CSS styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f2f2f2;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+form {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"], button {
+  margin-bottom: 10px;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#studentList {
+  margin-top: 20px;
+}
+
+.studentRecord {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.studentRecord p {
+  margin: 0;
+}
+
+.studentRecord button {
+  margin-top: 5px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.studentRecord button:hover {
+  background-color: #c82333;
+}
+</style>
+</head>
+<body>
+<h1>My Custom Admin Dashboard</h1>
+<div id="studentList">
+  <!-- Student records will be displayed here -->
+</div>
+<form id="studentForm">
+  <input type="text" id="name" placeholder="Enter Student Name" required>
+  <input type="text" id="roomNumber" placeholder="Enter Room Number" required>
+  <input type="text" id="contactNumber" placeholder="Enter Contact Number" required>
+  <button type="submit">Add Student</button>
+</form>
+
+<script>
+// Fetch student records and display them
+window.onload = function() {
+  fetchStudents();
+};
+
+// Function to fetch student records
+function fetchStudents() {
+  fetch('get_student.php')
+  .then(response => response.json())
+  .then(data => {
+    const studentList = document.getElementById('studentList');
+    studentList.innerHTML = '';
+    data.forEach(student => {
+      const studentDiv = document.createElement('div');
+      studentDiv.classList.add('studentRecord');
+      studentDiv.innerHTML = `<p>${student.name}, Room: ${student.room_number}, Contact: ${student.contact_number}</p>
+      <button onclick="deleteStudent(${student.id})">Delete</button>`;
+      studentList.appendChild(studentDiv);
+    });
+  });
+}
+
+// Function to add a new student
+document.getElementById('studentForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const name = document.getElementById('name').value;
+  const roomNumber = document.getElementById('roomNumber').value;
+  const contactNumber = document.getElementById('contactNumber').value;
+  fetch('add_student.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: name,
+      roomNumber: roomNumber,
+      contactNumber: contactNumber
+    })
+  })
+  .then(response => response.text())
+  .then(data => {
+    alert(data);
+    fetchStudents();
+  });
+});
+
+// Function to delete a student
+function deleteStudent(id) {
+  fetch('delete_student.php?id=' + id)
+  .then(response => response.text())
+  .then(data => {
+    alert(data);
+    fetchStudents();
+  });
+}
+</script>
+</body>
+</html>
